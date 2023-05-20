@@ -52,6 +52,39 @@ func GetBook(w http.ResponseWriter, r *http.Request) {
 
 func UpdateBook(w http.ResponseWriter, r *http.Request) {
 
+	userID := chi.URLParamFromCtx(r.Context(), "id")
+	fmt.Println(userID)
+	id, _ := strconv.Atoi(userID)
+	defer r.Body.Close()
+
+	body,err:=ioutil.ReadAll(r.Body)
+
+	if err!=nil{
+		log.Fatalln(err)
+	}
+
+	var updatedBook models.Book
+
+	json.Unmarshal(body,&updatedBook)
+
+	// Iterate over all the bookStore
+
+	for index,book:=range mocks.BookStore{
+		if book.Id == id {
+			book.Title=updatedBook.Title
+			book.Author=updatedBook.Author
+			book.Desc=updatedBook.Desc
+			mocks.BookStore[index]=book
+
+			w.Header().Add("Content-Type", "application/json")
+            w.WriteHeader(http.StatusOK)
+
+            json.NewEncoder(w).Encode("Updated")
+            break
+
+		}
+	}
+
 }
 
 func AddBook(w http.ResponseWriter, r *http.Request) {
