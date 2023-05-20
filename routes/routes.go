@@ -124,4 +124,19 @@ func AddBook(w http.ResponseWriter, r *http.Request) {
 
 func DeleteBook(w http.ResponseWriter, r *http.Request) {
 
+	userID := chi.URLParamFromCtx(r.Context(), "id")
+	fmt.Println(userID)
+	id, _ := strconv.Atoi(userID)
+
+	for index, book := range mocks.BookStore {
+        if book.Id == id {
+            // Delete book and send a response if the book Id matches dynamic Id
+            mocks.BookStore = append(mocks.BookStore[:index], mocks.BookStore[index+1:]...)
+
+            w.Header().Add("Content-Type", "application/json")
+            w.WriteHeader(http.StatusOK)
+            json.NewEncoder(w).Encode("Deleted")
+            break
+        }
+    }
 }
