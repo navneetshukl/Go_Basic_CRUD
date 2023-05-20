@@ -8,6 +8,9 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
+
+	"github.com/go-chi/chi/v5"
 )
 
 func GetAllBooks(w http.ResponseWriter, r *http.Request) {
@@ -19,7 +22,7 @@ func GetAllBooks(w http.ResponseWriter, r *http.Request) {
 	for i := 0; i < n; i++ {
 
 		fmt.Println("{")
-		
+
 		fmt.Println("  \"id\": ",mocks.BookStore[i].Id)
 		fmt.Println(" \"title\": ",mocks.BookStore[i].Title)
 		fmt.Println(" \"author\": ",mocks.BookStore[i].Author)
@@ -34,6 +37,17 @@ func GetAllBooks(w http.ResponseWriter, r *http.Request) {
 
 func GetBook(w http.ResponseWriter, r *http.Request) {
 
+	userID := chi.URLParamFromCtx(r.Context(), "id")
+	fmt.Println(userID)
+	id, _ := strconv.Atoi(userID)
+
+	for _,book:= range mocks.BookStore{
+		if book.Id == id {
+			w.Header().Add("Content-Type","application/json")
+			w.WriteHeader(http.StatusOK)
+			json.NewEncoder(w).Encode(book)
+		}
+	}
 }
 
 func UpdateBook(w http.ResponseWriter, r *http.Request) {

@@ -12,9 +12,9 @@ func main() {
 
 	mux.Post("/add",routes.AddBook)
 	mux.Get("/getall",routes.GetAllBooks)
-	mux.Get("/get",routes.GetBook)
-	mux.Put("/update",routes.UpdateBook)
-	mux.Delete("/delete",routes.DeleteBook)
+	mux.Get("/get/{id}",routes.GetBook)
+	mux.Put("/update/{id}",routes.UpdateBook)
+	mux.Delete("/delete/{id}",routes.DeleteBook)
 
 	http.ListenAndServe(":8080",mux)
 }
