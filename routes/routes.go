@@ -11,6 +11,24 @@ import (
 )
 
 func GetAllBooks(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("COntent-Type","application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode("Fetched All Books Successfully")
+	n:=len(mocks.BookStore)
+
+	for i := 0; i < n; i++ {
+
+		fmt.Println("{")
+		
+		fmt.Println("  \"id\": ",mocks.BookStore[i].Id)
+		fmt.Println(" \"title\": ",mocks.BookStore[i].Title)
+		fmt.Println(" \"author\": ",mocks.BookStore[i].Author)
+		fmt.Println(" \"description\": ",mocks.BookStore[i].Desc)
+
+		fmt.Println("}")
+		
+	}
+
 
 }
 
